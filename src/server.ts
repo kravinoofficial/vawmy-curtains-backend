@@ -36,9 +36,10 @@ app.use('/api/social', socialRouter);
 app.use('/api', subcategoriesRouter);
 
 // Proxy for Supabase storage (fixes CORS issues)
-app.get('/api/storage/*', async (req, res) => {
+app.get('/api/storage/:bucket/:path(*)', async (req, res) => {
   try {
-    const storagePath = (req.params as any)[0];
+    const { bucket, path } = req.params;
+    const storagePath = `${bucket}/${path}`;
     const supabaseUrl = process.env.SUPABASE_URL || 'http://localhost:8000';
     const fullUrl = `${supabaseUrl}/storage/v1/object/public/${storagePath}`;
     
