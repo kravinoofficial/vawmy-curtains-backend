@@ -10,6 +10,7 @@ router.get('/', async (req, res) => {
     const { data, error } = await supabase
       .from('collections')
       .select('*')
+      .order('display_order', { ascending: true })
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -21,14 +22,25 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const { data, error } = await supabase
+    // Get collection with subcategories
+    const { data: collection, error: collectionError } = await supabase
       .from('collections')
       .select('*')
       .eq('id', req.params.id)
       .single();
 
-    if (error) throw error;
-    res.json(data);
+    if (collectionError) throw collectionError;
+
+    // Get subcategories for this collection
+    const { data: subcategories, error: subcategoriesError } = await supabase
+      .from('subcategories')
+      .select('*')
+      .eq('collection_id', req.params.id)
+      .order('display_order', { ascending: true });
+
+    if (subcategoriesError) throw subcategoriesError;
+
+    res.json({ ...collection, subcategories });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -37,11 +49,18 @@ router.get('/:id', async (req, res) => {
 // Admin routes
 router.post('/', basicAuth, async (req, res) => {
   try {
-    const { name, description, cover_image, images } = req.body;
+    const { name, description, cover_image, images, video_url, display_order } = req.body;
     
     const { data, error } = await supabase
       .from('collections')
-      .insert([{ name, description, cover_image, images }])
+      .insert([{ 
+        name, 
+        description, 
+        cover_image, 
+        images,
+        video_url: video_url || null,
+        display_order: display_order || 0
+      }])
       .select()
       .single();
 
@@ -54,11 +73,22 @@ router.post('/', basicAuth, async (req, res) => {
 
 router.put('/:id', basicAuth, async (req, res) => {
   try {
-    const { name, description, cover_image, images } = req.body;
+    const { name, description, cover_image, images, video_url, display_order } = req.body;
+    
+    const updateData: any = {
+      updated_at: new Date().toISOString()
+    };
+    
+    if (name !== undefined) updateData.name = name;
+    if (description !== undefined) updateData.description = description;
+    if (cover_image !== undefined) updateData.cover_image = cover_image;
+    if (images !== undefined) updateData.images = images;
+    if (video_url !== undefined) updateData.video_url = video_url;
+    if (display_order !== undefined) updateData.display_order = display_order;
     
     const { data, error } = await supabase
       .from('collections')
-      .update({ name, description, cover_image, images })
+      .update(updateData)
       .eq('id', req.params.id)
       .select()
       .single();
