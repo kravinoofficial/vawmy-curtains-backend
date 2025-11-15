@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { supabase } from '../config/supabase';
+import { supabase } from '../config/supabase.js';
 import multer from 'multer';
 import sharp from 'sharp';
 import path from 'path';
