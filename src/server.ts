@@ -4,18 +4,32 @@ import dotenv from 'dotenv';
 import collectionsRouter from './routes/collections.js';
 import contactRouter from './routes/contact.js';
 import uploadRouter from './routes/upload.js';
+import blogRouter from './routes/blog.js';
+import socialRouter from './routes/social.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// Configure CORS to allow all origins
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false
+}));
+
+// Handle preflight requests
+app.options('*', cors());
+
 app.use(express.json());
 
 app.use('/api/collections', collectionsRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/blog', blogRouter);
+app.use('/api/social', socialRouter);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
