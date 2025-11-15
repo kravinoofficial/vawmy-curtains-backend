@@ -40,7 +40,7 @@ router.get('/visible', async (req: Request, res: Response) => {
 });
 
 // Create new social media link (admin)
-router.post('/', basicAuth, async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
     const { platform, url, icon_name, is_visible, display_order } = req.body;
 
@@ -66,7 +66,7 @@ router.post('/', basicAuth, async (req: Request, res: Response) => {
 });
 
 // Update social media link (admin)
-router.put('/:id', basicAuth, async (req: Request, res: Response) => {
+router.put('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { platform, url, icon_name, is_visible, display_order } = req.body;
@@ -98,7 +98,7 @@ router.put('/:id', basicAuth, async (req: Request, res: Response) => {
 });
 
 // Delete social media link (admin)
-router.delete('/:id', basicAuth, async (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
