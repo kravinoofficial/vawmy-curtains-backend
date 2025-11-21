@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { supabase } from '../config/supabase.js';
+import { supabaseAuth } from '../middleware/auth.js';
 import multer from 'multer';
 import sharp from 'sharp';
 import path from 'path';
@@ -46,7 +47,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
 });
 
 // Create new blog post
-router.post('/', upload.single('cover_image'), async (req: Request, res: Response) => {
+router.post('/', supabaseAuth, upload.single('cover_image'), async (req: Request, res: Response) => {
   try {
     const { title, slug, excerpt, content, author } = req.body;
     let coverImageUrl = req.body.cover_image_url || '';
@@ -104,7 +105,7 @@ router.post('/', upload.single('cover_image'), async (req: Request, res: Respons
 });
 
 // Update blog post
-router.put('/:id', upload.single('cover_image'), async (req: Request, res: Response) => {
+router.put('/:id', supabaseAuth, upload.single('cover_image'), async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { title, slug, excerpt, content, author } = req.body;
@@ -166,7 +167,7 @@ router.put('/:id', upload.single('cover_image'), async (req: Request, res: Respo
 });
 
 // Delete blog post
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', supabaseAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 

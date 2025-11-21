@@ -8,6 +8,7 @@ import videoUploadRouter from './routes/video-upload.js';
 import blogRouter from './routes/blog.js';
 import socialRouter from './routes/social.js';
 import subcategoriesRouter from './routes/subcategories.js';
+import authRouter from './routes/auth.js';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.options('*', cors());
 
 app.use(express.json());
 
+app.use('/api/auth', authRouter);
 app.use('/api/collections', collectionsRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/upload', uploadRouter);

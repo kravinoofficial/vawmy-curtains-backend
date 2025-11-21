@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
 import { supabase } from '../config/supabase.js';
-import { basicAuth } from '../middleware/auth.js';
+import { supabaseAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 const upload = multer({ 
@@ -10,7 +10,7 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB max upload
 });
 
-router.post('/', basicAuth, upload.single('file'), async (req, res) => {
+router.post('/', supabaseAuth, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });

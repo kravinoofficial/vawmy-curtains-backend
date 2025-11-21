@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { supabase } from '../config/supabase.js';
-import { basicAuth } from '../middleware/auth.js';
+import { supabaseAuth } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -40,7 +40,7 @@ router.get('/visible', async (req: Request, res: Response) => {
 });
 
 // Create new social media link (admin)
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', supabaseAuth, async (req: Request, res: Response) => {
   try {
     const { platform, url, icon_name, is_visible, display_order } = req.body;
 
@@ -66,7 +66,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 // Update social media link (admin)
-router.put('/:id', async (req: Request, res: Response) => {
+router.put('/:id', supabaseAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { platform, url, icon_name, is_visible, display_order } = req.body;
@@ -98,7 +98,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 });
 
 // Delete social media link (admin)
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', supabaseAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 

@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { supabase } from '../config/supabase.js';
+import { supabaseAuth } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.get('/collections/:collectionId/subcategories', async (req: Request, res:
 });
 
 // Create new subcategory
-router.post('/subcategories', async (req: Request, res: Response) => {
+router.post('/subcategories', supabaseAuth, async (req: Request, res: Response) => {
   try {
     const { collection_id, name, images, display_order } = req.body;
 
@@ -54,7 +55,7 @@ router.post('/subcategories', async (req: Request, res: Response) => {
 });
 
 // Update subcategory
-router.put('/subcategories/:id', async (req: Request, res: Response) => {
+router.put('/subcategories/:id', supabaseAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { name, images, display_order } = req.body;
@@ -89,7 +90,7 @@ router.put('/subcategories/:id', async (req: Request, res: Response) => {
 });
 
 // Delete subcategory
-router.delete('/subcategories/:id', async (req: Request, res: Response) => {
+router.delete('/subcategories/:id', supabaseAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 

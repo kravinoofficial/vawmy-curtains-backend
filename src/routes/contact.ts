@@ -1,6 +1,6 @@
 import express from 'express';
 import { supabase } from '../config/supabase.js';
-import { basicAuth } from '../middleware/auth.js';
+import { supabaseAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 });
 
 // Admin route
-router.put('/', basicAuth, async (req, res) => {
+router.put('/', supabaseAuth, async (req, res) => {
   try {
     const { email, phone, address, hours } = req.body;
     

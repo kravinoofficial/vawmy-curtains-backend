@@ -1,6 +1,6 @@
 import express from 'express';
 import { supabase } from '../config/supabase.js';
-import { basicAuth } from '../middleware/auth.js';
+import { supabaseAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -47,7 +47,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Admin routes
-router.post('/', basicAuth, async (req, res) => {
+router.post('/', supabaseAuth, async (req, res) => {
   try {
     const { name, description, cover_image, images, video_url, display_order } = req.body;
     
@@ -71,7 +71,7 @@ router.post('/', basicAuth, async (req, res) => {
   }
 });
 
-router.put('/:id', basicAuth, async (req, res) => {
+router.put('/:id', supabaseAuth, async (req, res) => {
   try {
     const { name, description, cover_image, images, video_url, display_order } = req.body;
     
@@ -100,7 +100,7 @@ router.put('/:id', basicAuth, async (req, res) => {
   }
 });
 
-router.delete('/:id', basicAuth, async (req, res) => {
+router.delete('/:id', supabaseAuth, async (req, res) => {
   try {
     const { error } = await supabase
       .from('collections')
